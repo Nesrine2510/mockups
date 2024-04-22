@@ -1,0 +1,64 @@
+Exercice 4: Simulation de jeu de dés
+
+Simulation des Dépendances pour les Tests de la méthode jouer :
+Pour automatiser les tests de la méthode jouer dans la classe Jeu, certaines dépendances doivent être simulées. Ces dépendances comprennent des objets représentant des entités externes telles que le joueur (Joueur), les dés (De), et la banque (Banque). Ces interfaces seront simulées dans l'environnement de test pour reproduire leur comportement pendant le jeu.
+Scénarios de Test pour jouer :
+Pour tester minutieusement la méthode jouer, différents scénarios ou classes d'équivalence doivent être pris en compte. Ces scénarios incluent :
+Le Joueur Gagne : La somme des lancers de dés est 7, et le joueur gagne.
+Le Joueur Perd : La somme des lancers de dés n'est pas 7, et le joueur perd.
+Le Joueur est Insolvable : Le joueur n'a pas assez de fonds pour placer une mise.
+La Banque Devient Insolvable : La banque ne peut pas se permettre de payer les gains.
+Le Jeu est Fermé : Le jeu est fermé en raison de gains excessifs ou d'insolvabilité.
+Code Java pour la Classe Jeu :
+Voici le code Java pour la classe Jeu, implémentant la fonctionnalité requise pour le jeu :
+import java.util.Random;
+
+public class Jeu {
+    private Banque banque;
+
+    public Jeu(Banque labanque) {
+        this.banque = labanque;
+    }
+
+    public void jouer(Joueur joueur, De de1, De de2) throws JeuFermeException {
+        if (!estOuvert()) {
+            throw new JeuFermeException("Le jeu est fermé.");
+        }
+
+        int mise = joueur.mise();
+
+        try {
+            joueur.debiter(mise);
+            int resultat = de1.lancer() + de2.lancer();
+
+            if (resultat == 7) {
+                joueur.crediter(mise * 2);
+            } else {
+                // Le joueur perd
+            }
+        } catch (DebitImpossibleException e) {
+            // Le joueur est insolvable
+            throw new JeuFermeException("Le joueur est insolvable.");
+        }
+
+        if (!banque.est_solvable()) {
+            throw new JeuFermeException("La banque n'est plus solvable.");
+        }
+    }
+
+    public void fermer() {
+        
+    }
+
+    public boolean estOuvert() {
+        return true;
+    }
+}
+Test de la Fermeture du Jeu :
+cas de test : Parce que l'attention est dirigée vers le résultat.
+Test de l'Insolvabilité du Joueur :
+Dans ce cas de test, nous simulons un scénario où le joueur est insolvable. Pour garantir que le jeu n'interfère pas avec les dés, des stubs pour les méthodes de l'interface De peuvent être utilisés pour simuler les lancers de dés. Ce test se concentre sur la vérification de l'état du jeu lorsque le joueur est incapable de placer une mise.
+Poursuite avec d'Autres Scénarios :
+Après les tests initiaux, d'autres scénarios tels que les gains du joueur, les pertes du joueur et l'insolvabilité de la banque seront testés. Chaque scénario aura son propre ensemble d'assertions pour vérifier le comportement de la méthode jouer dans différentes conditions.
+Implémentation de la Banque et Réécriture du Test :
+Une implémentation pour l'interface banque sera fournie, comprenant des méthodes pour créditer, débiter et vérifier la solvabilité. Un des tests existants impliquant la banque sera réécrit pour intégrer cette implémentation. Une comparaison entre les deux tests sera effectuée pour comprendre les différences dans l'approche des tests et les résultats obtenus.
